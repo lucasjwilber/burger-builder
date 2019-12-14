@@ -1,0 +1,11 @@
+
+/* in a component file:
+import classes from 'css file'
+
+on component:
+className={classes.[class name]} */
+
+.Test {
+  background-color: red;
+  color: blue;
+}

@@ -1,0 +1,19 @@
+.BuildControl {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  margin: 5px;
+}
+
+.BuildControl button {
+  font-size: 2em;
+  font-weight: bold;
+  padding: 5px;
+  width: 50px;
+  cursor: pointer;
+  border: 1px solid gray;
+}
+.Disabled {
+  background-color: rgba(168, 167, 167, 0.89);
+  cursor: initial;
+}

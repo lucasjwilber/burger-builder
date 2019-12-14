@@ -1,0 +1,16 @@
+.BuildControls {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  background-color: rgb(165, 97, 42);
+  display: grid;
+  grid-template: 1fr 1fr / 1fr 1fr;
+  box-shadow: 0 2px 1px gray;
+  padding: 10px 0;
+}
+.Price {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2em;
+}
