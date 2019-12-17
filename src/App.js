@@ -3,6 +3,7 @@ import Layout from './components/Layout/Layout.js';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder.js';
 
 function App() {
+  console.log(process.env.REACT_APP_DATABASE_URL);
   return (
     <div>
       <Layout>
