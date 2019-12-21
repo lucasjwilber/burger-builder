@@ -6,7 +6,7 @@ const button = (props) => (
     onClick={props.clicked}
     className={[classes.Button, classes[props.buttonType]].join(' ')}
     >{props.children}
-  </button>
+    </button>
 );
 
 export default button;
