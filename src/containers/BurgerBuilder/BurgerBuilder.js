@@ -16,22 +16,33 @@ const INGREDIENT_PRICES = {
 }
 
 class BurgerBuilder extends Component {
+  //old way of setting up state, for reference
   // constructor(props) {
   //   super(props);
   //   this.state = {...};
   // }
 
   state = {
-    ingredients: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0,
-    },
+    //these are now fetched from firebase
+    // ingredients: {
+    //   salad: 0,
+    //   bacon: 0,
+    //   cheese: 0,
+    //   meat: 0,
+    // },
     totalPrice: 4,
-    purchaseable: false,
+    purchaseable: true,
     purchasing: false,
     loading: false,
+  }
+
+  componentDidMount() {
+    axios.get('/ingredients.json')
+      .then(response => {
+        console.log(response);
+        this.setState({ingredients: response.data});
+      })
+      .catch(error => console.error(error));
   }
 
   addIngredientHandler = (type) => {
@@ -70,42 +81,81 @@ class BurgerBuilder extends Component {
   }
 
   purchaseContinueHandler = () => {
-    this.setState({loading: true})
+    // this.setState({loading: true})
 
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Lucas',
-        address: {
-          street: '123 baker st',
-          zip: 123412,
-          country: 'USA'
-        },
-        email: 'test@fake.com',
-        deliveryMethod: 'fastest'
-      }
-    }
-    axios.post('/orders.js0n', order)
-      .then(response => {
-        this.setState({loading: false, purchasing: false});
-      })
-      .catch(error => {
-        console.error(error);
-        this.setState({loading: false, purchasing: false});
-      });
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: 'Lucas',
+    //     address: {
+    //       street: '123 baker st',
+    //       zip: 123412,
+    //       country: 'USA'
+    //     },
+    //     email: 'test@fake.com',
+    //     deliveryMethod: 'fastest'
+    //   }
+    // }
+    // axios.post('/orders.json', order)
+    //   .then(response => {
+    //     this.setState({loading: false, purchasing: false});
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //     this.setState({loading: false, purchasing: false});
+    //   });
   }
 
+  
+
+  sendToCheckout = () => {
+    const queryParams = [];
+    for (let i in this.props.ingredients) {
+      queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(this.props.ingredients[i])}`);
+    }
+    queryParams.push(`price: ${this.props.price}`);
+    console.log('queryParams:', queryParams);
+    const queryString = queryParams.join('&');
+
+    this.props.history.push({
+      pathname:'/checkout',
+      search: `?${queryString}`
+    });
+  }
+
+  
+
   render() {
-    let orderSummary = <OrderSummary 
-    ingredients={this.state.ingredients} 
-    continue={this.purchaseContinueHandler}
-    cancel={this.purchaseCancelHandler}
-    price={this.state.totalPrice}
-  />;
+    let burgerSection = <Spinner />;
+    let orderSummary = null;
 
     if (this.state.loading) {
       orderSummary = <Spinner />;
+    }
+
+    if (this.state.ingredients) {
+      burgerSection = (
+        <React.Fragment>
+          <Burger ingredients={this.state.ingredients}/>
+          <BuildControls 
+            price={this.state.totalPrice}
+            ordered={this.purchaseHandler}
+            ingredients={this.state.ingredients}
+            purchaseable={this.state.purchaseable}
+            ingredientAdded={this.addIngredientHandler}
+            ingredientRemoved={this.removeIngredientHandler} />
+        </React.Fragment>
+      );
+      orderSummary = (
+        <OrderSummary 
+          ingredients={this.state.ingredients} 
+          // continue={this.purchaseContinueHandler}
+          continue={this.sendToCheckout}
+          cancel={this.purchaseCancelHandler}
+          price={this.state.totalPrice}
+        />
+      );
     }
 
     return (
@@ -115,14 +165,7 @@ class BurgerBuilder extends Component {
           modalClosed={this.closeModalHandler}>
           {orderSummary}
         </Modal>
-        <Burger ingredients={this.state.ingredients}/>
-        <BuildControls 
-          price={this.state.totalPrice}
-          ordered={this.purchaseHandler}
-          ingredients={this.state.ingredients}
-          purchaseable={this.state.purchaseable}
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler} />
+        {burgerSection}
       </Aux>
     );
   }

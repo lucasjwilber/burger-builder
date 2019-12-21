@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import Aux from '../../../hoc/AuxComponent.js';
 import Button from '../../UI/Button/Button.js';
 
@@ -12,6 +13,22 @@ class OrderSummary extends Component {
         </li>
       ));
 
+      
+  const sendToCheckout = () => {
+    const queryParams = [];
+    for (let i in this.props.ingredients) {
+      queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(this.props.ingredients[i])}`);
+    }
+    queryParams.push(`price=${this.props.price}`);
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+      pathname:'/checkout',
+      search: `?${queryString}`
+    });
+  }
+
+      
+
     return (
       <Aux>
         <h3>Your Order:</h3>
@@ -20,10 +37,10 @@ class OrderSummary extends Component {
         <p>Total price: <strong>${this.props.price.toFixed(2)}</strong></p>
         <p>Continue to checkout?</p>
         <Button clicked={this.props.cancel} buttonType='Danger'>CANCEL</Button>
-        <Button clicked={this.props.continue} buttonType='Success'>CONTINUE</Button>
+        <Button buttonType='Success' clicked={sendToCheckout}>CONTINUE</Button>
       </Aux>
     )
   }
 };
 
-export default OrderSummary;
+export default withRouter(OrderSummary);
