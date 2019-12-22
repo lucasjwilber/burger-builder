@@ -50,7 +50,8 @@ class Checkout extends Component {
           
           <Route 
             path={`${this.props.match.path}/contact-info`}
-            render={() => <ContactData ingredients={this.state.ingredients} price={this.state.price} />} />
+            // props are passed on so that ContactData inherits router props
+            render={(props) => <ContactData ingredients={this.state.ingredients} price={this.state.price} {...props} />} />
       </div>
     );
   }
