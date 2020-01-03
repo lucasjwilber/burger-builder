@@ -1,32 +1,39 @@
-import React from 'react';
-import classes from './Order.module.css';
+import React from "react";
+import classes from "./Order.module.css";
 
-const order = (props) => {
+const order = props => {
   const ingredientsArray = [];
   //turn ingredients object into an array of objects
-  Object.entries(props.ingredients).forEach(ing => ingredientsArray.push(ing));
-  console.log('asdf', ingredientsArray);
+  if (props.ingredients) {
+    Object.entries(props.ingredients).forEach(ing =>
+      ingredientsArray.push(ing)
+    );
+  }
 
-  const ingredientsOutput = ingredientsArray.map(ig => {
+  const ingredientsOutput = ingredientsArray.map((ig, i) => {
     return (
-      <span  
+      <span
+        key={`${ig.name}${i}`}
         style={{
-          textTransform: 'capitalize', 
-          padding: '0.5em', 
-          margin: '0.5em', 
-          backgroundColor: 'lightgray'}}
-        key={ig.name}>
-          {ig[0]}: {ig[1]}
+          textTransform: "capitalize",
+          padding: "0.5em",
+          margin: "0.5em",
+          backgroundColor: "lightgray"
+        }}
+      >
+        {ig[0]}: {ig[1]}
       </span>
-    )
+    );
   });
 
   return (
     <div className={classes.Order}>
       <p>{ingredientsOutput}</p>
-      <p>Price: <strong>${props.price.toFixed(2)}</strong></p>
+      <p>
+        Price: <strong>${props.price}</strong>
+      </p>
     </div>
-  )
-}
+  );
+};
 
 export default order;

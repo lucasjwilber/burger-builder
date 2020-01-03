@@ -2,14 +2,17 @@
   width: 50%;
   margin: auto;
   position: absolute;
-  bottom: 5em;
+  bottom: 20%;
   left: 25%;
   display: flex;
   background-color: white;
   border: 1px solid #eee;
   box-shadow: 0 2px 3px #ccc;
-}
-.ContactData section, .ContactData label {
-  display: block;
   text-align: center;
 }
+.Form {
+  width: 100%;
+}
+  .Form input {
+    width: 50%;
+  }
