@@ -10,16 +10,16 @@ const order = props => {
     );
   }
 
-  const ingredientsOutput = ingredientsArray.map(ig => {
+  const ingredientsOutput = ingredientsArray.map((ig, i) => {
     return (
       <span
+        key={`${ig.name}${i}`}
         style={{
           textTransform: "capitalize",
           padding: "0.5em",
           margin: "0.5em",
           backgroundColor: "lightgray"
         }}
-        key={ig.name}
       >
         {ig[0]}: {ig[1]}
       </span>
