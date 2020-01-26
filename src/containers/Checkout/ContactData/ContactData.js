@@ -6,6 +6,9 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./ContactData.module.css";
 import axios from "../../../axiosOrders";
 import Input from "../../../components/UI/Input/Input";
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../../../store/actions/actionTypes';
+import {purchaseStart, purchaseSuccess, purchaseBurger} from '../../../store/actions/order';
 
 class ContactData extends Component {
   state = {
@@ -95,8 +98,6 @@ class ContactData extends Component {
       },
       formIsValid: false
     },
-    // price: 4,
-    loading: true
   };
 
   componentDidMount() {
@@ -142,7 +143,7 @@ class ContactData extends Component {
 
   orderSubmitted = event => {
     event.preventDefault();
-    this.setState({loading: true});
+    // this.setState({loading: true});
 
     const formValues = {};
     for (let field in this.state.orderForm) {
@@ -155,23 +156,13 @@ class ContactData extends Component {
       orderInfo: formValues
     };
 
-    axios
-      .post("/orders.json", order)
-      .then(response => {
-        this.setState({loading: false});
-        alert("order submittied");
-        this.props.history.push("/");
-      })
-      .catch(error => {
-        console.error(error);
-        this.setState({loading: false});
-      });
+      this.props.onBurgerOrdered(order);
   };
 
   render() {
     const formElementsArray = [];
     let formComponents = [];
-    if (!this.state.loading) {
+    if (!this.props.loading) {
       for (let key in this.state.orderForm) {
         formElementsArray.push({
           id: key,
@@ -192,7 +183,8 @@ class ContactData extends Component {
               touched={el.config.touched}
             />
           );
-        } else if (el.config.elementType === "select") {
+        }
+        if (el.config.elementType === "select") {
           return (
             <Input
               key={el.id}
@@ -232,9 +224,17 @@ class ContactData extends Component {
 
 const mapStateToProps = state => {
   return {
-    ingrs: state.ingredients,
-    price: state.totalPrice,
+    ingrs: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    loading: state.order.loading,
   }
 }
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+  return {
+    onBurgerOrdered: (orderData) => dispatch(purchaseBurger(orderData)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
+
