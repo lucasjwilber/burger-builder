@@ -39,6 +39,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         //explicitly defining ingredients here to control the order in which they render
+        //this conveniently also resets the state
         ingredients: {
           salad: action.ingredients.salad,
           bacon: action.ingredients.bacon,
@@ -47,6 +48,7 @@ const reducer = (state = initialState, action) => {
         },
         error: false,
         loading: false,
+        totalPrice: 4,
       }
     case actionTypes.FETCH_INGREDIENTS_FAILED:
       return {
