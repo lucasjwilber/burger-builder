@@ -9,6 +9,7 @@ import Input from "../../../components/UI/Input/Input";
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/actionTypes';
 import {purchaseStart, purchaseSuccess, purchaseBurger} from '../../../store/actions/order';
+import { Redirect } from "react-router-dom";
 
 class ContactData extends Component {
   state = {
@@ -143,7 +144,6 @@ class ContactData extends Component {
 
   orderSubmitted = event => {
     event.preventDefault();
-    // this.setState({loading: true});
 
     const formValues = {};
     for (let field in this.state.orderForm) {
@@ -160,6 +160,7 @@ class ContactData extends Component {
   };
 
   render() {
+
     const formElementsArray = [];
     let formComponents = [];
     if (!this.props.loading) {

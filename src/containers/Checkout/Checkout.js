@@ -8,12 +8,10 @@ import CheckoutSummary from "../../components/Order/CheckoutSummary.js";
 class Checkout extends Component {
 
   proceedToCheckout = () => {
-    console.log('proceed to checkout clicked');
     this.props.history.replace('/checkout/contact-info');
   }
 
   cancelCheckout = () => {
-    console.log('order cancel clicked');
     this.props.history.goBack();
   }
 
@@ -21,8 +19,11 @@ class Checkout extends Component {
     //without this redirect, when the page is refreshed during checkout the app crashes due to undefined state
     let summary = <Redirect to="/" />;
     if (this.props.ingrs) {
+      const purchasedRedirect = this.props.purchased ? <Redirect to="/" /> : null;
+
       summary = (
         <div>
+          {purchasedRedirect}
           <CheckoutSummary 
             ingredients={this.props.ingrs}
             proceed={this.proceedToCheckout}
@@ -42,9 +43,8 @@ const mapStateToProps = state => {
   return {
     ingrs: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
+    purchased: state.order.purchased,
   }
 }
-
-//mapDispatchToProps not needed as we aren't dispatching from this file
 
 export default connect(mapStateToProps)(Checkout);
