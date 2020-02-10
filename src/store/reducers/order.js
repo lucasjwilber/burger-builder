@@ -13,7 +13,7 @@ const purchaseInit = (state, action) => {
   }
 }
 
-//TODO: could combine some of these that only handle state + loading to "asyncStart"/"asyncFailed" 
+//TODO: could probably combine some of these that only handle state + loading to "asyncStart"/"asyncFailed" 
 const purchaseStart = (state, action) => {
   return {
     ...state,
